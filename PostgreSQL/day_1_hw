@@ -1,0 +1,18 @@
+FIND
+
+3. MATCH FULL -> all keys in compound FK must match or both must be null
+
+
+DO
+
+SELECT * 
+FROM pg_class
+WHERE relnamespace = 2200 AND reltoastrelid <> 0;
+
+SELECT c.country_name
+FROM countries AS c
+JOIN venues AS v ON c.country_code = v.country_code
+JOIN events AS e ON v.venue_id = e.venue_id
+WHERE e.title = 'LARP Club';
+
+ALTER TABLE venues ADD COLUMN active bool DEFAULT true;
