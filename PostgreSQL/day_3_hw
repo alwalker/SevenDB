@@ -1,0 +1,33 @@
+FIND
+
+http://www.postgresql.org/docs/9.1/static/contrib.html
+
+Rubular
+
+DO
+
+CREATE OR REPLACE FUNCTION get_suggestion(criteria text, is_actor bool)
+  RETURNS table (movie_id integer,  title text) AS $$
+BEGIN
+  IF is_actor THEN
+    RETURN QUERY 
+    SELECT m.movie_id, m.title
+    FROM movies m 
+    INNER JOIN movies_actors ma ON m.movie_id = ma.movie_id 
+    INNER JOIN actors a ON a.actor_id = ma.actor_id
+    WHERE a.name = criteria
+    LIMIT 5;
+  ELSE
+    RETURN query 
+    SELECT m.movie_id, m.title
+    FROM movies m, (SELECT genre, x.title FROM movies x WHERE x.title = criteria) s
+    WHERE cube_enlarge(s.genre, 5, 18) @> m.genre AND s.title <> m.title
+    ORDER BY cube_distance(m.genre, s.genre)
+    LIMIT 5;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--add comments
+--use ts_vector to get keywords
+--count keywords
