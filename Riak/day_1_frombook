@@ -1,0 +1,76 @@
+10018
+10028
+10038
+
+
+cd ~/riak-1.4.8
+
+make devrel
+
+echo "Starting dev1"
+dev/dev1/bin/riak start
+
+echo "Starting dev2"
+dev/dev2/bin/riak start
+
+echo "Starting dev3"
+dev/dev3/bin/riak start
+
+echo "Joining dev2 to dev1"
+dev/dev2/bin/riak-admin -f join dev1@127.0.0.1
+
+echo "Joining dev3 to dev2"
+dev/dev3/bin/riak-admin -f join dev2@127.0.0.1
+
+curl http://192.168.1.47:10018/ping
+
+curl -I http://192.168.1.47:10018/riak/no_bucket/no_key
+
+curl -v -X PUT http://192.168.1.47:10018/riak/animals/ace \
+-H "Content-Type: application/json" \
+-d '{"nickname":"The Wonder Dog", "breed":"German Shepherd"}'
+
+http://192.168.1.47:10018/riak/animals/ace
+
+http://192.168.1.47:10018/riak?buckets=true
+
+curl -v -X PUT http://192.168.1.47:10018/riak/animals/polly?returnbody=true \
+-H "Content-Type: application/json" \
+-d '{"nickname":"Sweet Polly Purebred", "breed":"Purebred"}'
+
+curl -i -X POST http://192.168.1.47:10018/riak/animals \
+-H "Content-Type: application/json" \
+-d '{"nickname":"Seargent Stubby", "breed":"Terrier"}'
+
+curl -i -X DELETE http://192.168.1.47:10018/riak/animals/XgefnV3VKl0IOfAIlHDRpAiLLGT
+
+curl http://192.168.1.47:10018/riak/animals?keys=true
+
+curl -X PUT http://192.168.1.47:10018/riak/cages/1 \
+-H "Content-Type: application/json" \
+-H "Link: </riak/animals/polly>; riaktag=\"contains\"" \
+-d '{"room":101}'
+
+#Has to be hand typed
+curl -X PUT http://192.168.1.47:10018/riak/cages/2 \
+-H "Content-Type: application/json" \
+-H "Link: </riak/animals/ace>; riaktag=\"contains\",
+</riak/cages/1>; riaktag=\"next_to\"" \
+-d '{"room":101}'
+
+curl http://192.168.1.47:10018/riak/cages/1/_,_,_
+
+curl http://192.168.1.47:10018/riak/cages/2/animals,_,_
+
+curl http://192.168.1.47:10018/riak/cages/2/_,next_to,_
+
+curl -X PUT http://192.168.1.47:10018/riak/cages/1 \
+-H "Content-Type: application/json" \
+-H "X-Riak-Meta-Color: Pink" \
+-H "Link: </riak/animals/polly>; riaktag=\"contains\"" \
+-d '{"room":101}'
+
+curl -X PUT http://192.168.1.47:10018/riak/photos/polly.jpg \
+-H "Content-type: image/jpeg" \
+-H "Link: </riak/animals/polly>; riaktag=\"photo\"" \
+--data-binary @wbXX7tB.jpg
