@@ -11,7 +11,7 @@ require 'rubygems'
 require 'riak'
 STYLES = %w{single double queen king suite}
 
-client = Riak::Client.new(:http_port => 8091)
+client = Riak::Client.new({:host=>'192.168.1.47', :http_port => 10018})
 bucket = client.bucket('rooms')
 # Create 100 floors to the building
 for floor in 1..100
