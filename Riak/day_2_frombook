@@ -1,0 +1,27 @@
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @room_cap.js
+
+curl -X PUT http://192.168.1.47:10018/riak/my_functions/map_capacity \
+-H "Content-Type: application/json" \
+--data @room_cap_store.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @call_room_cap.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @map_vals.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @total_room_cap.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @filter_total_room_cap.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @link.js

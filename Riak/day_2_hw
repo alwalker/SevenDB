@@ -1,0 +1,7 @@
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @day_2_hw_1.js
+
+curl -X POST http://192.168.1.47:10018/mapred \
+-H "Content-Type: application/json" \
+--data @day_2_hw_2.js

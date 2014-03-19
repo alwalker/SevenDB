@@ -1,0 +1,20 @@
+FIND
+
+1) http://docs.basho.com/riak/latest/
+2) http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types
+
+DO
+
+curl -v -X PUT http://192.168.1.47:10018/riak/animals/polly?returnbody=true \
+-H "Content-Type: application/json" \
+-H "Link: </riak/photos/polly>; riaktag=\"photo\"" \
+-d '{"nickname":"Sweet Polly Purebred", "breed":"Purebred"}'
+
+curl -X PUT http://192.168.1.47:10018/riak/stuff/res.pdf \
+-H "Content-type: application/pdf" \
+--data-binary @original_application.pdf
+
+curl -X PUT http://192.168.1.47:10018/riak/medicines/antiobiotics \
+-H "Content-type: image/jpeg" \
+-H "Link: </riak/animals/ace>; riaktag=\"photo\"" \
+--data-binary @rx.jpg

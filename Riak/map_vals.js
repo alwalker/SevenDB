@@ -1,0 +1,9 @@
+{
+	"inputs":[["rooms", "101"], ["rooms", "102"], ["rooms", "103"]],
+	"query": [
+	{"map": {
+		"language":"javascript",
+		"name":"Riak.mapValuesJson"
+	}}
+	]
+}
